@@ -111,5 +111,5 @@ DF.new(
   sos: Enum.map(teams, fn x -> RPI.calc_sos(df, x) end),
   rpi: Enum.map(teams, fn x -> RPI.calc_rpi(df, x) end)
 )
-|> DF.sort_by(desc: rpi, desc: pd)
+|> DF.sort_by(desc: rpi)
 ```
