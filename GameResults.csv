@@ -1,0 +1,82 @@
+week,set,winner,loser,winner_score,loser_score
+1,1,Above ParR,CityOfThrees,22,16
+1,2,Above ParR,CityOfThrees,23,21
+1,3,Above ParR,CityOfThrees,21,15
+1,1,Kangz,Tsaf,21,17
+1,2,Tsaf,Kangz,21,19
+1,3,Kangz,Tsaf,21,11
+1,1,Team Avatar,Motley,22,14
+1,2,Motley,Team Avatar,21,0
+1,3,Motley,Team Avatar,23,21
+1,1,Chow Men,Bob Ross,21,10
+1,2,Chow Men,Bob Ross,21,8
+1,3,Chow Men,Bob Ross,21,11
+1,1,Spartans,Net Positive,21,16
+1,2,Spartans,Net Positive,21,18
+1,3,Spartans,Net Positive,22,11
+1,1,The Big 3,>30%,22,15
+1,2,>30%,The Big 3,21,15
+1,3,The Big 3,>30%,21,15
+1,1,The Free Agents,The A-Team,22,9
+1,2,The Free Agents,The A-Team,21,15
+1,3,The A-Team,The Free Agents,22,20
+2,1,The Free Agents,Team Avatar,21,18
+2,2,The Free Agents,Team Avatar,21,18
+2,3,The Free Agents,Team Avatar,17,4
+2,1,Tsaf,CityOfThrees,21,0
+2,2,CityOfThrees,Tsaf,21,11
+2,3,CityOfThrees,Tsaf,21,10
+2,1,Net Positive,Kangz,22,20
+2,2,Net Positive,Kangz,21,19
+2,3,Net Positive,Kangz,21,18
+2,1,Bob Ross,Motley,21,18
+2,2,Motley,Bob Ross,22,15
+2,3,Bob Ross,Motley,21,19
+2,1,Chow Men,>30%,21,18
+2,2,>30%,Chow Men,21,11
+2,3,Chow Men,>30%,22,6
+2,1,Spartans,Above ParR,22,11
+2,2,Spartans,Above ParR,22,11
+2,3,Spartans,Above ParR,23,18
+2,1,The Big 3,The A-Team,21,10
+2,2,The Big 3,The A-Team,21,11
+2,3,The Big 3,The A-Team,21,8
+3,1,Above ParR,Motley,22,18
+3,2,Above ParR,Motley,21,18
+3,3,Motley,Above ParR,22,10
+3,1,Team Avatar,The Big 3,21,18
+3,2,Team Avatar,The Big 3,21,15
+3,3,The Big 3,Team Avatar,21,18
+3,1,Spartans,Tsaf,22,4
+3,2,Spartans,Tsaf,22,6
+3,3,Spartans,Tsaf,22,10
+3,1,Kangz,Bob Ross,22,12
+3,2,Bob Ross,Kangz,22,12
+3,3,Kangz,Bob Ross,22,16
+3,1,Net Positive,CityOfThrees,21,11
+3,2,Net Positive,CityOfThrees,22,18
+3,3,Net Positive,CityOfThrees,21,19
+3,1,Chow Men,The Free Agents,21,19
+3,2,Chow Men,The Free Agents,22,18
+3,3,Chow Men,The Free Agents,21,18
+4,1,Bob Ross,Tsaf,21,12
+4,2,Bob Ross,Tsaf,21,14
+4,3,Bob Ross,Tsaf,21,15
+4,1,Chow Men,The A-Team,21,17
+4,2,Chow Men,The A-Team,21,4
+4,3,Chow Men,The A-Team,21,10
+4,1,Spartans,The Big 3,22,5
+4,2,Spartans,The Big 3,22,10
+4,3,Spartans,The Big 3,21,15
+4,1,Above ParR,Net Positive,21,15
+4,2,Above ParR,Net Positive,21,17
+4,3,Above ParR,Net Positive,21,17
+4,1,Team Avatar,CityOfThrees,21,15
+4,2,Team Avatar,CityOfThrees,22,16
+4,3,CityOfThrees,Team Avatar,21,5
+4,1,>30%,Kangz,21,15
+4,2,>30%,Kangz,21,16
+4,3,Kangz,>30%,21,18
+4,1,The Free Agents,Motley,21,10
+4,2,The Free Agents,Motley,21,12
+4,3,Motley,The Free Agents,21,18

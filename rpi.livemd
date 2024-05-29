@@ -1,0 +1,114 @@
+# RPI
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.12.3"},
+  {:kino_explorer, "~> 0.1.19"}
+])
+```
+
+## Section
+
+```elixir
+require Explorer.DataFrame, as: DF
+require Explorer.Series, as: Series
+```
+
+```elixir
+df = DF.from_csv!("GameResults.csv")
+
+teams =
+  Series.concat(df[:winner], df[:loser])
+  |> Series.distinct()
+  |> Series.to_enum()
+```
+
+```elixir
+defmodule RPI do
+  def calc_wp(game_data, team) do
+    gp = DF.filter(game_data, winner == ^team or loser == ^team)
+    Series.sum(Series.equal(gp[:winner], team)) / Series.count(gp[:winner])
+  end
+
+  def calc_wp(game_data, team, team_drop) do
+    gp =
+      DF.filter(
+        game_data,
+        (winner == ^team or loser == ^team) and
+          winner != ^team_drop and loser != ^team_drop
+      )
+
+    Series.sum(Series.equal(gp[:winner], team)) / Series.count(gp[:winner])
+  end
+
+  def calc_wl(game_data, team, type) do
+    Series.sum(Series.equal(game_data[type], team))
+  end
+
+  # def calc_pd(game_data, team) do
+  #   gp = DF.filter(game_data, winner == ^team or loser == ^team)
+
+  #   List.zip([
+  #     Series.to_list(gp[:winner]),
+  #     Series.to_list(gp[:winner_score]),
+  #     Series.to_list(gp[:loser_score])
+  #   ])
+  #   |> Enum.map(fn {w, ws, ls} -> if(w == team, do: ws - ls, else: ls - ws) end)
+  #   |> Series.from_list()
+  #   |> Series.sum()
+  # end
+
+  def calc_pd(game_data, team) do
+    game_data
+    |> DF.filter(winner == ^team or loser == ^team)
+    |> DF.mutate(
+      pd: if(winner == ^team, do: winner_score - loser_score, else: loser_score - winner_score)
+    )
+    |> DF.pull("pd")
+    |> Series.sum()
+  end
+
+  def calc_owp(game_data, team) do
+    opp_games = DF.filter(game_data, winner == ^team or loser == ^team)
+
+    Enum.zip(Series.to_enum(opp_games[:winner]), Series.to_enum(opp_games[:loser]))
+    |> Enum.map(fn {k, v} -> if(k == team, do: v, else: k) end)
+    |> Enum.map(fn x -> calc_wp(game_data, x, team) end)
+    |> Series.from_list()
+    |> Series.mean()
+  end
+
+  def calc_oowp(game_data, team) do
+    opp_games = DF.filter(game_data, winner == ^team or loser == ^team)
+
+    Enum.zip(Series.to_enum(opp_games[:winner]), Series.to_enum(opp_games[:loser]))
+    |> Enum.map(fn {k, v} -> if(k == team, do: v, else: k) end)
+    |> Enum.map(fn x -> calc_owp(game_data, x) end)
+    |> Series.from_list()
+    |> Series.mean()
+  end
+
+  def calc_sos(game_data, team) do
+    (2 * calc_owp(game_data, team) + calc_oowp(game_data, team)) / 3
+  end
+
+  def calc_rpi(game_data, team) do
+    0.25 * calc_wp(game_data, team) +
+      0.5 * calc_owp(game_data, team) +
+      0.25 * calc_oowp(game_data, team)
+  end
+end
+```
+
+```elixir
+DF.new(
+  team: teams,
+  win: Enum.map(teams, fn x -> RPI.calc_wl(df, x, :winner) end),
+  loss: Enum.map(teams, fn x -> RPI.calc_wl(df, x, :loser) end),
+  wp: Enum.map(teams, fn x -> RPI.calc_wp(df, x) end),
+  pd: Enum.map(teams, fn x -> RPI.calc_pd(df, x) end),
+  sos: Enum.map(teams, fn x -> RPI.calc_sos(df, x) end),
+  rpi: Enum.map(teams, fn x -> RPI.calc_rpi(df, x) end)
+)
+|> DF.sort_by(desc: rpi, desc: pd)
+```
