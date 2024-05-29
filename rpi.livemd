@@ -45,6 +45,8 @@ defmodule RPI do
     Series.sum(Series.equal(game_data[type], team))
   end
 
+  ## retaining this version as a reminder of alternative approach
+  ## can use Enum.zip if only have two elements to zip
   # def calc_pd(game_data, team) do
   #   gp = DF.filter(game_data, winner == ^team or loser == ^team)
 
@@ -69,22 +71,21 @@ defmodule RPI do
   end
 
   def calc_owp(game_data, team) do
-    opp_games = DF.filter(game_data, winner == ^team or loser == ^team)
-
-    Enum.zip(Series.to_enum(opp_games[:winner]), Series.to_enum(opp_games[:loser]))
-    |> Enum.map(fn {k, v} -> if(k == team, do: v, else: k) end)
-    |> Enum.map(fn x -> calc_wp(game_data, x, team) end)
-    |> Series.from_list()
+    game_data
+    |> DF.filter(winner == ^team or loser == ^team)
+    |> DF.mutate(opp: if(winner == ^team, do: loser, else: winner))
+    |> DF.pull("opp")
+    # transform is computationally expensive b/c of type conversion
+    |> Series.transform(fn x -> calc_wp(game_data, x, team) end)
     |> Series.mean()
   end
 
   def calc_oowp(game_data, team) do
-    opp_games = DF.filter(game_data, winner == ^team or loser == ^team)
-
-    Enum.zip(Series.to_enum(opp_games[:winner]), Series.to_enum(opp_games[:loser]))
-    |> Enum.map(fn {k, v} -> if(k == team, do: v, else: k) end)
-    |> Enum.map(fn x -> calc_owp(game_data, x) end)
-    |> Series.from_list()
+    game_data
+    |> DF.filter(winner == ^team or loser == ^team)
+    |> DF.mutate(opp: if(winner == ^team, do: loser, else: winner))
+    |> DF.pull("opp")
+    |> Series.transform(fn x -> calc_owp(game_data, x) end)
     |> Series.mean()
   end
 
