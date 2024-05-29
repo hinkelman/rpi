@@ -12,16 +12,21 @@
 (define (calc-wp game-data team)
   (calc-wp-helper (game-filter game-data team) team))
 
+;; used in calc-owp
+(define (calc-wp2 game-data team team-drop)
+  (calc-wp-helper (game-filter2 game-data team team-drop) team))
+
+(define (calc-wp-helper games-played team)
+  (let* ([all-winners ($ games-played 'winner)]
+         [team-winners (filter (lambda (x) (string=? team x)) all-winners)])
+    (inexact (/ (length team-winners) (length all-winners)))))
+
 (define (game-filter df team)
   (dataframe-filter*
    df
    (winner loser)
    (or (string=? winner team)
        (string=? loser team))))
-
-;; used in calc-owp
-(define (calc-wp2 game-data team team-drop)
-  (calc-wp-helper (game-filter2 game-data team team-drop) team))
 
 (define (game-filter2 df team team-drop)
   (dataframe-filter*
@@ -31,11 +36,6 @@
             (string=? loser team))
         (not (string=? winner team-drop))
         (not (string=? loser team-drop)))))
-
-(define (calc-wp-helper games-played team)
-  (let* ([all-winners ($ games-played 'winner)]
-         [team-winners (filter (lambda (x) (string=? team x)) all-winners)])
-    (inexact (/ (length team-winners) (length all-winners)))))
 
 (define (calc-wl game-data team type)
   (length (filter (lambda (x) (string=? team x)) ($ game-data type))))
@@ -47,16 +47,16 @@
               ($ games-played 'winner_score)
               ($ games-played 'loser_score)))))
 
-(define (calc-pd game-data team)
-  (-> game-data
-      (game-filter team)
-      (dataframe-modify*
-       (pd (winner winner_score loser_score)
-           (if (string=? team winner)
-               (- winner_score loser_score)
-               (- loser_score winner_score))))
-      ($ 'pd)
-      (sum)))
+;; (define (calc-pd game-data team)
+;;   (-> game-data
+;;       (game-filter team)
+;;       (dataframe-modify*
+;;        (pd (winner winner_score loser_score)
+;;            (if (string=? team winner)
+;;                (- winner_score loser_score)
+;;                (- loser_score winner_score))))
+;;       ($ 'pd)
+;;       (sum)))
  
 (define (calc-owp game-data team)
   (let* ([opp-games (game-filter game-data team)]
@@ -95,7 +95,7 @@
                           (make-series 'PD (map (lambda (x) (calc-pd df2 x)) teams))
                           (make-series 'SOS (map (lambda (x) (calc-sos df2 x)) teams))
                           (make-series 'RPI (map (lambda (x) (calc-rpi df2 x)) teams))))
-    (dataframe-sort* (> RPI) (> PD))
+    (dataframe-sort* (> RPI))
     (dataframe-display 14))
 
 (exit)
