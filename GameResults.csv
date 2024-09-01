@@ -80,3 +80,54 @@ week,set,winner,loser,winner_score,loser_score
 4,1,The Free Agents,Motley,21,10
 4,2,The Free Agents,Motley,21,12
 4,3,Motley,The Free Agents,21,18
+5,1,Spartans,Chow Men,21,14
+5,2,Spartans,Chow Men,21,16
+5,3,Spartans,Chow Men,22,17
+5,1,>30%,Above ParR,21,16
+5,2,>30%,Above ParR,21,18
+5,3,>30%,Above ParR,22,19
+5,1,The Free Agents,Kangz,22,11
+5,2,Kangz,The Free Agents,22,19
+5,3,The Free Agents,Kangz,21,17
+5,1,Team Avatar,Tsaf,21,16
+5,2,Tsaf,Team Avatar,23,20
+5,3,Team Avatar,Tsaf,21,18
+5,1,The Big 3,Bob Ross,22,17
+5,2,The Big 3,Bob Ross,21,16
+5,3,The Big 3,Bob Ross,21,18
+5,1,Motley,CityOfThrees,21,16
+5,2,Motley,CityOfThrees,21,17
+5,3,Motley,CityOfThrees,21,18
+6,1,The Free Agents,Spartans,22,17
+6,2,Spartans,The Free Agents,21,16
+6,3,The Free Agents,Spartans,21,18
+6,1,>30%,Bob Ross,21,18
+6,2,Bob Ross,>30%,21,14
+6,3,Bob Ross,>30%,21,15
+6,1,The Big 3,Tsaf,21,15
+6,2,The Big 3,Tsaf,21,15
+6,3,Tsaf,The Big 3,21,16
+6,1,Chow Men,CityOfThrees,22,7
+6,2,Chow Men,CityOfThrees,21,10
+6,3,Chow Men,CityOfThrees,21,11
+6,1,Kangz,Team Avatar,21,15
+6,2,Team Avatar,Kangz,22,19
+6,3,Team Avatar,Kangz,22,16
+7,1,Kangz,Motley,22,19
+7,2,Kangz,Motley,21,15
+7,1,Bob Ross,The A-Team,21,13
+7,2,The A-Team,Bob Ross,21,11
+7,3,Bob Ross,The A-Team,21,15
+7,1,The Big 3,Above ParR,21,19
+7,2,Above ParR,The Big 3,22,18
+7,3,Above ParR,The Big 3,22,20
+7,1,The Free Agents,Team Avatar,21,17
+7,2,Team Avatar,The Free Agents,21,16
+7,3,The Free Agents,Team Avatar,21,18
+7,1,Spartans,Kangz,22,16
+7,2,Spartans,Kangz,21,17
+7,1,Chow Men,Bob Ross,21,15
+7,2,Chow Men,Bob Ross,21,16
+7,1,CityOfThrees,Tsaf,22,13
+7,2,CityOfThrees,Tsaf,22,18
+7,3,CityOfThrees,Tsaf,21,15
