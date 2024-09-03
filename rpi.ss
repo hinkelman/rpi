@@ -88,4 +88,4 @@
                           (make-series 'SOS (map (lambda (x) (calc-sos df x)) teams))
                           (make-series 'RPI (map (lambda (x) (calc-rpi df x)) teams))))
     (dataframe-sort* (> RPI))
-    (dataframe-display 14))
+    (dataframe-display (length teams)))
