@@ -16,40 +16,45 @@ require Explorer.Series, as: Series
 
 ```elixir
 df = DF.from_csv!("GameResults.csv")
-
-teams =
-  Series.concat(df[:winner], df[:loser])
-  |> Series.distinct()
-  |> Series.to_enum()
 ```
 
 ```elixir
 defmodule RPI do
-  def calc_wp(game_data, team) do
-    gp = DF.filter(game_data, winner == ^team or loser == ^team)
-    Series.sum(Series.equal(gp[:winner], team)) / Series.count(gp[:winner])
-  end
-
-  def calc_wp(game_data, team, team_drop) do
-    gp =
-      DF.filter(
-        game_data,
-        (winner == ^team or loser == ^team) and
-          winner != ^team_drop and loser != ^team_drop
-      )
-
-    Series.sum(Series.equal(gp[:winner], team)) / Series.count(gp[:winner])
-  end
-
   def calc_wl(game_data, team, type) do
     Series.sum(Series.equal(game_data[type], team))
+  end
+
+  def filter_team(game_data, team) do
+    DF.filter(game_data, winner == ^team or loser == ^team)
+  end
+
+  def filter_team_opp(game_data, team, opp) do
+    DF.filter(filter_team(game_data, team), winner != ^opp and loser != ^opp)
+  end
+
+  def wp(winners, team) do
+    Series.sum(Series.equal(winners, team)) / Series.count(winners)
+  end
+
+  def calc_wp(game_data, team) do
+    games_played = filter_team(game_data, team)
+    wp(games_played[:winner], team)
+  end
+
+  def calc_pd(game_data, team) do
+    game_data
+    |> filter_team(team)
+    |> DF.mutate(
+      pd: if(winner == ^team, do: winner_score - loser_score, else: loser_score - winner_score)
+    )
+    |> DF.pull("pd")
+    |> Series.sum()
   end
 
   ## retaining this version as a reminder of alternative approach
   ## can use Enum.zip if only have two elements to zip
   # def calc_pd(game_data, team) do
-  #   gp = DF.filter(game_data, winner == ^team or loser == ^team)
-
+  #   gp = filter_team(game_data)
   #   List.zip([
   #     Series.to_list(gp[:winner]),
   #     Series.to_list(gp[:winner_score]),
@@ -60,24 +65,19 @@ defmodule RPI do
   #   |> Series.sum()
   # end
 
-  def calc_pd(game_data, team) do
-    game_data
-    |> DF.filter(winner == ^team or loser == ^team)
-    |> DF.mutate(
-      pd: if(winner == ^team, do: winner_score - loser_score, else: loser_score - winner_score)
-    )
-    |> DF.pull("pd")
-    |> Series.sum()
-  end
-
   def calc_owp(game_data, team) do
     game_data
     |> DF.filter(winner == ^team or loser == ^team)
     |> DF.mutate(opp: if(winner == ^team, do: loser, else: winner))
     |> DF.pull("opp")
     # transform is computationally expensive b/c of type conversion
-    |> Series.transform(fn x -> calc_wp(game_data, x, team) end)
+    |> Series.transform(fn x -> calc_wp_owp(game_data, x, team) end)
     |> Series.mean()
+  end
+
+  def calc_wp_owp(game_data, team, opp) do
+    games_played = filter_team_opp(game_data, team, opp)
+    wp(games_played[:winner], team)
   end
 
   def calc_oowp(game_data, team) do
@@ -85,7 +85,7 @@ defmodule RPI do
     |> DF.filter(winner == ^team or loser == ^team)
     |> DF.mutate(opp: if(winner == ^team, do: loser, else: winner))
     |> DF.pull("opp")
-    |> Series.transform(fn x -> calc_owp(game_data, x) end)
+    |> Series.transform(fn opp -> calc_owp(game_data, opp) end)
     |> Series.mean()
   end
 
@@ -102,6 +102,11 @@ end
 ```
 
 ```elixir
+teams =
+  Series.concat(df[:winner], df[:loser])
+  |> Series.distinct()
+  |> Series.to_enum()
+
 DF.new(
   team: teams,
   win: Enum.map(teams, fn x -> RPI.calc_wl(df, x, :winner) end),
