@@ -80,12 +80,13 @@
 
 (define teams (remove-duplicates (append ($ df 'winner) ($ df 'loser))))
 
-(-> (make-dataframe (list (make-series 'Team teams)
-                          (make-series 'Win (map (lambda (x) (calc-wl df x 'winner)) teams))
-                          (make-series 'Loss (map (lambda (x) (calc-wl df x 'loser)) teams))
-                          (make-series 'WP (map (lambda (x) (calc-wp df x)) teams))
-                          (make-series 'PD (map (lambda (x) (calc-pd df x)) teams))
-                          (make-series 'SOS (map (lambda (x) (calc-sos df x)) teams))
-                          (make-series 'RPI (map (lambda (x) (calc-rpi df x)) teams))))
+(-> (make-dataframe
+     (list (make-series 'Team teams)
+           (make-series 'Win (map (lambda (x) (calc-wl df x 'winner)) teams))
+           (make-series 'Loss (map (lambda (x) (calc-wl df x 'loser)) teams))
+           (make-series 'WP (map (lambda (x) (calc-wp df x)) teams))
+           (make-series 'PD (map (lambda (x) (calc-pd df x)) teams))
+           (make-series 'SOS (map (lambda (x) (calc-sos df x)) teams))
+           (make-series 'RPI (map (lambda (x) (calc-rpi df x)) teams))))
     (dataframe-sort* (> RPI))
     (dataframe-display (length teams)))

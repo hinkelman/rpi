@@ -45,7 +45,9 @@ defmodule RPI do
     game_data
     |> filter_team(team)
     |> DF.mutate(
-      pd: if(winner == ^team, do: winner_score - loser_score, else: loser_score - winner_score)
+      pd: if(winner == ^team, 
+        do: winner_score - loser_score, 
+        else: loser_score - winner_score)
     )
     |> DF.pull("pd")
     |> Series.sum()
