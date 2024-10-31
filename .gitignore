@@ -192,4 +192,3 @@ erl_crash.dump
 
 *.akku
 *.akku.sig
-!Akku.manifest
